@@ -27,7 +27,10 @@ class Currency extends Model
         }
 
         // Fetch live exchange rate if outdated
-        $apiKey = '8f3f96cdaae81d6f2f3419aa'; 
+        $apiKey = config('services.exchange_rate.api_key');
+        if (!$apiKey) {
+            return $currency->exchange_rate;
+        }
         $response = Http::get("https://v6.exchangerate-api.com/v6/$apiKey/latest/INR");
 
         if ($response->successful()) {
